@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Infrastructure\Exceptions;
+
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Throwable;
+
+class DomainException extends Exception
+{
+    public function __construct(string $message = 'Domain exception occurred', int $code = 400, ?Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+
+    /**
+     * Report the exception.
+     */
+    public function report(): void
+    {
+        // Log the exception if needed
+    }
+
+    /**
+     * Render the exception into an HTTP response.
+     */
+    public function render(Request $request): JsonResponse
+    {
+        return response()->json([
+            'success' => false,
+            'message' => $this->getMessage(),
+            'error_type' => 'domain_exception',
+        ], $this->getCode());
+    }
+}

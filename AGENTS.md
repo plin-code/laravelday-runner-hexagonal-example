@@ -205,6 +205,126 @@ Use Wayfinder to generate TypeScript functions for Laravel routes. Import from `
 
 - IMPORTANT: Activate `inertia-react-development` when working with Inertia React client-side patterns.
 
+=== plin-code/laravel-clean-architecture/core rules ===
+
+## Laravel Clean Architecture
+
+This package generates and enforces a three layer structure: `App\Domain`,
+`App\Application`, `App\Infrastructure`. Generate code with its commands instead
+of writing the folders by hand, so namespaces, base classes and file names stay
+consistent with the configured paths.
+
+### Layers and dependency direction
+
+- `App\Domain`: Eloquent models, enums, domain events, must not depend on
+  `App\Application` or `App\Infrastructure`.
+- `App\Application`: actions, services, jobs and listeners, the use cases,
+  must not depend on `App\Infrastructure`, unless the namespace is listed in
+  `validation.application_infrastructure_allowed`.
+- `App\Infrastructure`: controllers, console commands, requests, resources,
+  mail, notifications, observers, exports. Depends on the layers above, never
+  the other way round.
+- Observers belong to `App\Infrastructure`, not to the domain. Queued jobs
+  orchestrate use cases and belong to `App\Application`. Console commands are
+  input adapters like controllers: they belong to `App\Infrastructure` and
+  call an action, which holds the business logic. Laravel only discovers
+  commands in app/Console/Commands, so register the infrastructure ones in
+  bootstrap/app.php with `->withCommands([...])`.
+- DTOs, policies and Filament panels have no generator: the skill says
+  where each one goes.
+- An action never receives the HTTP request. The controller passes
+  `$request->validated()`, an array, and models already resolved. A readonly
+  DTO is fine when several callers must normalise the same input.
+- Generated actions do not open a transaction. When an invariant only holds if
+  several writes, or a read and a write, happen atomically, the action opens it
+  itself, with `lockForUpdate()` when it reads before writing. Mail, events and
+  jobs go in `DB::afterCommit()`.
+- To cross a layer, the inner layer declares an interface and the outer layer
+  implements it, bound in a service provider: a port in `App\Application` with
+  its adapter in `App\Infrastructure`, or a contract in `App\Domain`
+  implemented in `App\Application`. A class with one implementation, used only
+  inside its own layer, needs no contract.
+
+### Generating code
+
+<code-snippet name="Create a full domain and its pieces" lang="bash">
+php artisan clean-arch:install
+php artisan clean-arch:make-domain Article
+php artisan clean-arch:make-action PublishArticle Article
+php artisan clean-arch:make-service Article
+php artisan clean-arch:make-controller Article
+php artisan clean-arch:make-mail Article
+php artisan clean-arch:make-notification Article
+php artisan clean-arch:make-observer Article Article
+php artisan clean-arch:make-job Article
+php artisan clean-arch:make-listener Article
+php artisan clean-arch:make-export Article
+</code-snippet>
+
+`clean-arch:make-domain` writes the model, the events, the actions, the
+requests, the resource, the controller, the migration, the factory and the test
+in one go.
+Pass `--no-base` to skip the base classes. After that it asks, one confirm at a
+time, whether to also generate an observer, a listener, a job, a mail, a
+notification and an export, and `--no-interaction` declines all six. It does
+not write routes: it prints the `Route::apiResource()` line to add to
+routes/api.php, which the generated test calls under `/api`.
+
+Single file commands (make-action, make-service, make-controller,
+make-observer, make-listener, make-job, make-mail, make-notification,
+make-export, make-arch-rules) refuse to overwrite an existing file and exit 1.
+`clean-arch:install`, `clean-arch:make-domain` and `clean-arch:generate-package`
+skip existing files instead, write the rest, and exit 0. Either way, pass
+`--force` to overwrite.
+
+`clean-arch:install --migrate-app` moves app/Http, app/Actions, app/Concerns
+and the other Laravel folders into the layers and rewrites the references.
+`--user-in-domain` moves `User` alone into `App\Domain`.
+
+### Checking the architecture
+
+The package does not analyse code itself, it writes a phparkitect
+configuration that the application runs.
+
+<code-snippet name="Generate and run the rules" lang="bash">
+composer require --dev phparkitect/phparkitect
+php artisan clean-arch:make-arch-rules
+vendor/bin/phparkitect check
+</code-snippet>
+
+Regenerate `phparkitect.php` with `clean-arch:make-arch-rules --force` after
+changing any key under `validation` in the config, otherwise the file keeps the
+old rules.
+
+### Configuration that changes where code is written
+
+Read `config/clean-architecture.php` before assuming paths or namespaces:
+
+- `directories.domain`, `directories.application`, `directories.infrastructure`:
+  where each layer lives. The namespaces are derived from these paths.
+- `default_namespace`: the root namespace, `App` by default.
+- `generation.model_directory`: the subfolder of the domain model, `Models` by
+  default. An empty value puts the model directly in the domain folder.
+- `generation.job_prefix`: the prefix of generated jobs, `Process` by default.
+- `generation.web_controller_path`: where `make-controller --web` writes,
+  `Http/Controllers/Web` by default. API controllers always go to
+  `Http/Controllers/Api`.
+- `validation.rules`: the seven rules written into `phparkitect.php`, each can
+  be turned off by name. `no_commands_in_infrastructure` and
+  `no_classes_outside_layers` are off by default. The latter reports every class
+  of the root namespace (app/ with the defaults) outside the three layers.
+- `validation.outside_layers_allowed`: namespaces, relative to the root
+  namespace, that may stay outside the layers. `['Providers']` by default.
+- `validation.application_infrastructure_allowed`: infrastructure namespaces the
+  application layer may import, relative to the infrastructure layer. Empty by
+  default.
+
+<code-snippet name="Allow mail and notifications from the application layer" lang="php">
+'validation' => [
+    'application_infrastructure_allowed' => ['Mail', 'Notifications'],
+],
+</code-snippet>
+
 === plin-code/laravel-custom-fields/core rules ===
 
 ## Laravel Custom Fields

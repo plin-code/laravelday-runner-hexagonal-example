@@ -1,0 +1,120 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Clean Architecture Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This file contains configuration options for the Laravel Clean
+    | Architecture package.
+    |
+    */
+
+    /*
+    | Root namespace of the generated code.
+    */
+    'default_namespace' => 'App',
+
+    /*
+    | Paths of the three layers, relative to the base path. clean-arch:install
+    | and the make-* commands write the generated classes there, with
+    | namespaces derived from these paths, and clean-arch:make-arch-rules
+    | decides what to scan from them.
+    */
+    'directories' => [
+        'domain' => 'app/Domain',
+        'application' => 'app/Application',
+        'infrastructure' => 'app/Infrastructure',
+    ],
+
+    'validation' => [
+        'custom_messages' => true,
+
+        /*
+        | Rules written by clean-arch:make-arch-rules into phparkitect.php. Set
+        | one to false to leave it out of the generated file, then regenerate it
+        | with --force. 'no_commands_in_infrastructure' is off by default: a
+        | console command is an input adapter, like an HTTP controller, so it
+        | lives in Infrastructure and calls an action for the business logic.
+        | 'no_classes_outside_layers' is off by default too: it reports every
+        | class of the directory the layers share (app/ with the defaults)
+        | that is not in a layer, such as the app/Http and app/Models Laravel
+        | ships with, so turn it on once the app has been moved into the
+        | layers.
+        */
+        'rules' => [
+            'domain_no_application_imports' => true,
+            'domain_no_infrastructure_imports' => true,
+            'application_no_infrastructure_imports' => true,
+            'no_observers_in_domain' => true,
+            'no_jobs_in_infrastructure' => true,
+            'no_commands_in_infrastructure' => false,
+            'no_classes_outside_layers' => true,
+        ],
+
+        /*
+        | Infrastructure namespaces the application layer may import without
+        | breaking 'application_no_infrastructure_imports', for side effects
+        | such as mail and notifications sent straight from an action. Values
+        | are relative to the infrastructure layer, so ['Mail', 'Notifications']
+        | allows App\Infrastructure\Mail and App\Infrastructure\Notifications
+        | while every other infrastructure import is still reported. Empty by
+        | default. Regenerate phparkitect.php with --force after changing it.
+        */
+        'application_infrastructure_allowed' => [],
+
+        /*
+        | Namespaces that may stay outside the layers without breaking
+        | 'no_classes_outside_layers', relative to the root namespace, so
+        | ['Providers'] allows App\Providers. Providers is listed by default
+        | because bootstrap/providers.php registers the service providers
+        | there and Laravel's generators write them there. Regenerate
+        | phparkitect.php with --force after changing it.
+        */
+        'outside_layers_allowed' => ['Providers'],
+    ],
+
+    /*
+    | Options read by clean-arch:make-domain and the individual make-* commands
+    | when they generate code.
+    */
+    'generation' => [
+        /*
+        | When true (the default) generated services and actions extend the
+        | BaseService and BaseAction classes created by clean-arch:install.
+        | Pass --no-base to the command, or set this to false, to generate
+        | standalone classes without a base class.
+        */
+        'extend_base_classes' => true,
+
+        /*
+        | Subfolder the domain model is generated under, inside each domain's
+        | directory. Defaults to 'Models', so clean-arch:make-domain writes
+        | app/Domain/Articles/Models/Article.php declaring
+        | App\Domain\Articles\Models\Article. Set it to null or an empty
+        | string to generate the model directly inside the domain directory
+        | instead, app/Domain/Articles/Article.php declaring
+        | App\Domain\Articles\Article. Any other single segment, for example
+        | 'Entities', replaces 'Models'.
+        */
+        'model_directory' => 'Models',
+
+        /*
+        | Prefix clean-arch:make-job puts in front of the generated job, both
+        | in the class name and in the file name. Defaults to 'Process', so
+        | make-job Article writes ProcessArticleJob.php. Set it to null or an
+        | empty string to generate ArticleJob.php instead, or to any other
+        | studly segment, for example 'Handle'.
+        */
+        'job_prefix' => 'Process',
+
+        /*
+        | Path clean-arch:make-controller --web writes to, relative to the
+        | infrastructure layer directory. The generated namespace follows it.
+        | Defaults to 'Http/Controllers/Web', next to the API controllers,
+        | which are always generated under Http/Controllers/Api.
+        */
+        'web_controller_path' => 'Http/Controllers/Web',
+    ],
+];
