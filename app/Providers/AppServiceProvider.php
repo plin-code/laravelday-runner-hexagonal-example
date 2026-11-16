@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Domain\Runners\Models\Runner;
 use App\Domain\Users\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use PlinCode\CustomFields\Facades\CustomFields;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'user' => User::class,
         ]);
+
+        CustomFields::registerEntity(Runner::class, 'runner', 'Runner');
+
         $this->configureDefaults();
     }
 
