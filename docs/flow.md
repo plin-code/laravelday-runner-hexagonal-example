@@ -74,6 +74,8 @@ Scelte fatte davanti a un'ambiguità della specifica.
 
 - `app/Domain/Shared/BaseModel.php` resta anche se nessun modello lo estende. Il file `phparkitect.php` generato da `clean-arch:make-arch-rules` lo importa come controllo che l'autoload funzioni, quindi cancellarlo rompe `phparkitect check` a ogni rigenerazione con `--force`. Le altre classi generate e inutilizzate (`BaseService`, `BaseRequest`, le tre eccezioni in `Infrastructure/Exceptions`) sono state cancellate.
 - Le action estendono `BaseAction` e usano il suo `log()` per registrare iscrizioni, check-in e import.
+- Un'action esiste dove c'è una regola da proteggere (guardie, transazione, lock, notifica). Il CRUD senza regole scrive con Eloquent dal layer di infrastruttura, cosa che le regole dei layer permettono: i controller `Settings` dello starter kit, la risorsa Filament dei contest e la pagina di modifica del runner.
+- La pagina di modifica del runner fa due scritture (il runner e i suoi custom fields) e attiva la transazione di Filament con `$hasDatabaseTransactions`, che di default è spenta. Se la seconda scrittura fallisce, anche la prima viene annullata.
 - L'iscrizione non ha un modello proprio. È la pivot `contest_runner` della relazione `belongsToMany` tra `Contest` e `Runner`.
 - Le eccezioni delle guardie sono una sola classe (`RegistrationRejectedException`) con un enum per il motivo. La traduzione in messaggio italiano sta nel controller, perché è un dettaglio di presentazione.
 - `User` implementa `FilamentUser` nel layer di dominio. È un'interfaccia del vendor, non dell'infrastruttura dell'app, e le regole dei layer restano verdi.
