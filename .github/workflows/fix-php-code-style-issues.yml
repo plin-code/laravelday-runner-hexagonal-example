@@ -1,0 +1,45 @@
+name: fix php code style issues
+
+on:
+  push:
+    paths: ['**.php']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php-code-styling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The bot's own style commit lands as another push. Without this guard the
+    # workflow would run a second time only to find nothing left to fix.
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      # persist-credentials stays enabled here, unlike in every other workflow:
+      # this is the one job that has to push back to the branch.
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_mysql, redis, gd, exif, bcmath
+          coverage: none
+      - uses: actions/cache@v6
+        with:
+          path: vendor
+          key: vendor-8.4-${{ hashFiles('composer.lock') }}
+          restore-keys: vendor-8.4-
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --no-scripts
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      - run: vendor/bin/pint --parallel
+      # Commits made with GITHUB_TOKEN do not trigger workflows, so this style
+      # commit will not re-run tests or static analysis by itself.
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: 'style(lint): fix coding style issues'
+          commit_options: '--no-verify'
