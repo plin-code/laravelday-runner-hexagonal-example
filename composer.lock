@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "65dd8b58843abc950e8512da9a564508",
+    "content-hash": "8119f1c146dbbb647c2b5d82958c70c7",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5172,6 +5172,96 @@
                 }
             ],
             "time": "2026-09-02T13:35:06+00:00"
+        },
+        {
+            "name": "plin-code/laravel-name-fixer",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plin-code/laravel-name-fixer.git",
+                "reference": "e0c642fc20b4fd2d3bfab5d6085fdd6e58dde6e1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plin-code/laravel-name-fixer/zipball/e0c642fc20b4fd2d3bfab5d6085fdd6e58dde6e1",
+                "reference": "e0c642fc20b4fd2d3bfab5d6085fdd6e58dde6e1",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "illuminate/contracts": "^12.0||^13.0",
+                "illuminate/database": "^12.0||^13.0",
+                "illuminate/support": "^12.0||^13.0",
+                "illuminate/validation": "^12.0||^13.0",
+                "php": "^8.3",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.14",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/testbench": "^10.0.0||^11.0.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "NameFixer": "PlinCode\\LaravelNameFixer\\Facades\\NameFixer"
+                    },
+                    "providers": [
+                        "PlinCode\\LaravelNameFixer\\NameFixerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PlinCode\\LaravelNameFixer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Barbaro",
+                    "email": "barbaro.daniele@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Clean, normalize and properly case personal names before validation in Laravel",
+            "homepage": "https://github.com/plin-code/laravel-name-fixer",
+            "keywords": [
+                "Plin Code",
+                "csv-import",
+                "italian",
+                "laravel",
+                "laravel-name-fixer",
+                "name-case",
+                "names",
+                "normalize",
+                "sanitize",
+                "surnames",
+                "title-case",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/plin-code/laravel-name-fixer/issues",
+                "source": "https://github.com/plin-code/laravel-name-fixer/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Plin Code",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-09-24T10:12:13+00:00"
         },
         {
             "name": "plin-code/laravel-sql-dialect",
