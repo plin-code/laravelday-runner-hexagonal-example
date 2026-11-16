@@ -29,7 +29,6 @@ yarn-error.log
 /.idea
 /.nova
 /.vscode
-/.zed
 /.claude/settings.local.json
 !/.claude/skills/
 !/.cursor/skills/
