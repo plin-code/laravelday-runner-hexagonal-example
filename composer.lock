@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e6200e990fd56257b2bd02447856997",
+    "content-hash": "f27251fe4f8ac0e97c6cc00e48a5796b",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5003,6 +5003,88 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/2.4.1"
             },
             "time": "2026-10-30T19:36:28+00:00"
+        },
+        {
+            "name": "plin-code/laravel-eloquent-sorts",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plin-code/laravel-eloquent-sorts.git",
+                "reference": "c7d6c007039c676ca5f93da965f14b6fdbc4cd48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plin-code/laravel-eloquent-sorts/zipball/c7d6c007039c676ca5f93da965f14b6fdbc4cd48",
+                "reference": "c7d6c007039c676ca5f93da965f14b6fdbc4cd48",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "php": "^8.4",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-query-builder": "^7.3.1"
+            },
+            "require-dev": {
+                "driftingly/rector-laravel": "^2.0",
+                "larastan/larastan": "^3.9",
+                "laravel/pint": "^1.29",
+                "nunomaduro/collision": "^8.1",
+                "orchestra/testbench": "^10.0 || ^11.0",
+                "pestphp/pest": "^4.6",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.1",
+                "pestphp/pest-plugin-type-coverage": "^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "rector/rector": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "PlinCode\\EloquentSorts\\EloquentSortsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PlinCode\\EloquentSorts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Barbaro",
+                    "email": "barbaro.daniele@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Reusable Eloquent sorts: order by a relation column, by relation count, by a custom enum order. With adapters for spatie/laravel-query-builder.",
+            "homepage": "https://github.com/plin-code/laravel-eloquent-sorts",
+            "keywords": [
+                "PlinCode",
+                "eloquent",
+                "laravel",
+                "query-builder",
+                "sorting",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/plin-code/laravel-eloquent-sorts/issues",
+                "source": "https://github.com/plin-code/laravel-eloquent-sorts/tree/v1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/plin-code",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-09-02T13:35:06+00:00"
         },
         {
             "name": "plin-code/laravel-sql-dialect",
