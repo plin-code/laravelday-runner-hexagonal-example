@@ -16,6 +16,11 @@ class EditRunner extends EditRecord
 {
     protected static string $resource = RunnerResource::class;
 
+    /**
+     * Filament does not wrap a save in a transaction unless the page or the panel asks for it.
+     */
+    protected ?bool $hasDatabaseTransactions = true;
+
     protected function getHeaderActions(): array
     {
         return [
@@ -41,8 +46,8 @@ class EditRunner extends EditRecord
     }
 
     /**
-     * Save the runner and its custom fields. Filament wraps the save in a transaction,
-     * so a refused custom field value rolls the runner back too.
+     * Save the runner and its custom fields. The page transaction rolls the runner back
+     * when the custom fields cannot be written.
      *
      * @param  array<string, mixed>  $data
      */

@@ -6,6 +6,7 @@ use App\Infrastructure\Filament\Resources\Runners\Pages\EditRunner;
 use App\Infrastructure\Filament\Resources\Runners\Pages\ListRunners;
 use Database\Seeders\RunnerPreferenceSeeder;
 use Livewire\Livewire;
+use PlinCode\CustomFields\Facades\CustomFields;
 
 test('guests are redirected to the panel login', function () {
     $this->get('/admin')->assertRedirect('/admin/login');
@@ -72,4 +73,20 @@ test('editing a runner shows and saves its custom fields', function () {
         ->and($runner->getCustomField('taglia-maglietta'))->toBe('xl')
         ->and($runner->getCustomField('newsletter'))->toBeTrue()
         ->and($runner->getCustomField('contatto-di-emergenza'))->toBe('+39 333 1234567');
+});
+
+test('a failed custom field write rolls the runner back', function () {
+    $this->seed(RunnerPreferenceSeeder::class);
+    $this->actingAs(User::factory()->admin()->create());
+    $runner = Runner::factory()->create(['first_name' => 'Mario']);
+    CustomFields::valueModel()::saving(fn () => throw new RuntimeException('write failed'));
+
+    expect(fn () => Livewire::test(EditRunner::class, ['record' => $runner->id])
+        ->fillForm([
+            'first_name' => 'Marco',
+            'custom_fields.contatto-di-emergenza' => '+39 333 1234567',
+        ])
+        ->call('save'))->toThrow(RuntimeException::class, 'write failed');
+
+    expect($runner->refresh()->first_name)->toBe('Mario');
 });
