@@ -32,8 +32,8 @@ jobs:
     steps:
       # persist-credentials stays enabled here, unlike in every other workflow:
       # this job has to push back to the branch.
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
           cache: npm
@@ -41,7 +41,7 @@ jobs:
       - run: npm run check:fix
       # Commits made with GITHUB_TOKEN do not trigger workflows, so this style
       # commit will not re-run tests or static analysis by itself.
-      - uses: stefanzweifel/git-auto-commit-action@v7
+      - uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7.2.1
         with:
           commit_message: 'style(format): fix frontend formatting issues'
           commit_options: '--no-verify'

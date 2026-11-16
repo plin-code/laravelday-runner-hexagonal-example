@@ -21,13 +21,13 @@ jobs:
     steps:
       # persist-credentials stays enabled here, unlike in every other workflow:
       # this is the one job that has to push back to the branch.
-      - uses: actions/checkout@v7
-      - uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
         with:
           php-version: '8.4'
           extensions: mbstring, intl, pdo_mysql, redis, gd, exif, bcmath
           coverage: none
-      - uses: actions/cache@v6
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: vendor
           key: vendor-8.4-${{ hashFiles('composer.lock') }}
@@ -39,7 +39,7 @@ jobs:
       - run: vendor/bin/pint --parallel
       # Commits made with GITHUB_TOKEN do not trigger workflows, so this style
       # commit will not re-run tests or static analysis by itself.
-      - uses: stefanzweifel/git-auto-commit-action@v7
+      - uses: stefanzweifel/git-auto-commit-action@d0b01107b5db882071f96de5dd4b54961ea93f4c # v7.2.1
         with:
           commit_message: 'style(lint): fix coding style issues'
           commit_options: '--no-verify'
