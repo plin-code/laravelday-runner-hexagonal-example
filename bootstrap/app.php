@@ -1,5 +1,6 @@
 <?php
 
+use App\Infrastructure\Console\Commands\ImportContestsCommand;
 use App\Infrastructure\Http\Middleware\HandleAppearance;
 use App\Infrastructure\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -14,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withCommands([
+        ImportContestsCommand::class,
+    ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
