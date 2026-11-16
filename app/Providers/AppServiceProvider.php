@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Application\Contracts\RegistrationNotifier;
 use App\Domain\Runners\Models\Runner;
 use App\Domain\Users\Models\User;
+use App\Infrastructure\Mail\MailRegistrationNotifier;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Date;
@@ -19,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(RegistrationNotifier::class, MailRegistrationNotifier::class);
     }
 
     /**
