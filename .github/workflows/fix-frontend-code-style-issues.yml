@@ -1,0 +1,47 @@
+name: fix frontend code style issues
+
+on:
+  # Manual runs exist so the whole tree can be reformatted at once, without
+  # waiting for a push that happens to touch a matching path.
+  workflow_dispatch:
+  push:
+    paths:
+      - '**.ts'
+      - '**.tsx'
+      - '**.js'
+      - '**.jsx'
+      - '**.css'
+      - '**.json'
+      - '**.md'
+      - package-lock.json
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend-code-styling:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The bot's own style commit lands as another push. Without this guard the
+    # workflow would run a second time only to find nothing left to fix.
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      # persist-credentials stays enabled here, unlike in every other workflow:
+      # this job has to push back to the branch.
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check:fix
+      # Commits made with GITHUB_TOKEN do not trigger workflows, so this style
+      # commit will not re-run tests or static analysis by itself.
+      - uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: 'style(format): fix frontend formatting issues'
+          commit_options: '--no-verify'
