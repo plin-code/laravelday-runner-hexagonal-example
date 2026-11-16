@@ -1,18 +1,27 @@
 {
     "agents": [
-        "amp",
         "claude_code",
         "codex",
         "cursor",
-        "factory",
+        "opencode",
         "grok_build",
-        "opencode"
+        "pi",
+        "zed"
     ],
     "cloud": true,
     "guidelines": true,
     "mcp": true,
     "nightwatch": false,
-    "sail": false,
+    "packages": [
+        "plin-code/laravel-custom-fields",
+        "plin-code/laravel-sql-dialect",
+        "spatie/laravel-activitylog",
+        "spatie/laravel-medialibrary",
+        "filament/filament",
+        "spatie/laravel-backup",
+        "spatie/laravel-query-builder"
+    ],
+    "sail": true,
     "skills": [
         "infer-conventions",
         "deploying-to-cloud",
@@ -21,6 +30,12 @@
         "testing-best-practices",
         "wayfinder-development",
         "inertia-react-development",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "filament-development",
+        "custom-fields-development",
+        "activitylog-development",
+        "laravel-backup",
+        "medialibrary-development",
+        "laravel-query-builder"
     ]
 }
