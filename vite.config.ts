@@ -66,11 +66,9 @@ export default defineConfig({
         ignorePatterns: [
             '.github/**',
             '.agents/**',
-            '.amp/**',
             '.claude/**',
             '.codex/**',
             '.cursor/**',
-            '.factory/**',
             '.grok/**',
             '.pi/**',
             '.zed/**',
