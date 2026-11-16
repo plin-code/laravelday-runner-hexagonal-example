@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4aa85a694453185f444c8765b2161090",
+    "content-hash": "94af4369e65038cf8d1b2424d39c8f69",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5327,6 +5327,94 @@
                 }
             ],
             "time": "2026-09-02T13:35:06+00:00"
+        },
+        {
+            "name": "plin-code/laravel-email-fixer",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plin-code/laravel-email-fixer.git",
+                "reference": "8c4689bc323f8ac47fc27c2d5d4ea640bcabb963"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plin-code/laravel-email-fixer/zipball/8c4689bc323f8ac47fc27c2d5d4ea640bcabb963",
+                "reference": "8c4689bc323f8ac47fc27c2d5d4ea640bcabb963",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/promises": "^2.0||^3.0",
+                "illuminate/contracts": "^12.0||^13.0",
+                "illuminate/support": "^12.0||^13.0",
+                "illuminate/validation": "^12.0||^13.0",
+                "php": "^8.3",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.14",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/testbench": "^10.0.0||^11.0.0",
+                "pestphp/pest": "^4.0",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "EmailFixer": "PlinCode\\LaravelEmailFixer\\Facades\\EmailFixer"
+                    },
+                    "providers": [
+                        "PlinCode\\LaravelEmailFixer\\EmailFixerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PlinCode\\LaravelEmailFixer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Barbaro",
+                    "email": "barbaro.daniele@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Sanitize, normalize and auto-correct malformed email addresses before validation in Laravel",
+            "homepage": "https://github.com/plin-code/laravel-email-fixer",
+            "keywords": [
+                "Plin Code",
+                "autocorrect",
+                "csv-import",
+                "email",
+                "laravel",
+                "laravel-email-fixer",
+                "normalize",
+                "sanitize",
+                "typo",
+                "validation"
+            ],
+            "support": {
+                "issues": "https://github.com/plin-code/laravel-email-fixer/issues",
+                "source": "https://github.com/plin-code/laravel-email-fixer/tree/v1.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Plin Code",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-11-16T09:35:35+00:00",
+            "published-time": "2026-11-16T09:38:43+00:00"
         },
         {
             "name": "plin-code/laravel-full-name",
@@ -13243,7 +13331,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-11-15T19:58:26+00:00"
+            "time": "2026-11-15T19:58:26+00:00",
+            "published-time": "2026-11-15T19:58:39+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -15022,5 +15111,5 @@
         "php": "^8.4"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
