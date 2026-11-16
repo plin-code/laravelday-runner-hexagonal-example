@@ -1,0 +1,68 @@
+name: frontend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Wayfinder types every route parameter from the bound model's column in
+      # the real schema, so the check needs a migrated database. SQLite in a
+      # file is enough: the suite already runs on it, and it keeps this job
+      # free of service containers.
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
+      # Booting the framework before any migration has run would otherwise hit
+      # a "cache" table that does not exist yet.
+      CACHE_STORE: array
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      # PHP is here only to generate the Wayfinder route and action modules,
+      # which are gitignored and which most of the frontend imports. It stays
+      # a single version on purpose: this check never exercises backend code,
+      # so running it once per PHP version would buy nothing.
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_sqlite, sqlite3, gd, exif, bcmath
+          coverage: none
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/cache@v6
+        with:
+          path: vendor
+          key: vendor-8.4-${{ hashFiles('composer.lock') }}
+          restore-keys: vendor-8.4-
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --no-scripts
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      - name: Composer post-install scripts
+        run: composer run-script post-autoload-dump
+      - run: npm ci
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - run: touch "$DB_DATABASE"
+      - run: php artisan migrate --force
+      # --with-form mirrors the formVariants option the Vite plugin uses, so
+      # the modules generated here match the ones a developer gets locally.
+      - run: php artisan wayfinder:generate --with-form
+      # Formatting is not verified here: fix-frontend-code-style-issues.yml
+      # runs `vp check --fix` on push and commits the result, the same way Pint
+      # is handled for PHP.
+      - run: npm run types:check
