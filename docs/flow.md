@@ -92,6 +92,7 @@ Scelte fatte davanti a un'ambiguità della specifica.
 - Il controllo sui nomi usa una regex nel FormRequest invece di `ValidName` del pacchetto, perché deve accettare anche l'apostrofo tipografico e il punto o la virgola finali, che poi `NameFixer` toglie.
 - La mail di conferma è in coda (`ShouldQueue`). Con `QUEUE_CONNECTION=database` serve un worker attivo per vederla nel log.
 - Dopo l'iscrizione l'utente torna alla home con un toast di conferma.
+- Il form pubblico non verifica che chi scrive sia il proprietario dell'email. È il comportamento richiesto dalla specifica ed è accettato per la demo, ma non va in produzione così. Chi conosce l'email di un runner può iscriverlo a un contest al posto suo. Chi usa l'email di un utente senza Runner (per esempio l'admin) crea il profilo Runner con nome e data di nascita a sua scelta. I messaggi "già iscritta" e "profilo disattivato" rivelano quali email esistono, e il `throttle:10,1` rallenta soltanto. Nessun dato esistente viene sovrascritto e nessun account diventa accessibile. Per la produzione servono un'iscrizione in attesa fino al clic su un link firmato inviato per mail e una risposta unica che non riveli se l'email esiste.
 
 **Check-in**
 
