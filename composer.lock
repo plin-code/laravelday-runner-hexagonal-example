@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73bb83521ed39209dd090f5b2c5e22ff",
+    "content-hash": "1e6200e990fd56257b2bd02447856997",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5003,6 +5003,85 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/2.4.1"
             },
             "time": "2026-10-30T19:36:28+00:00"
+        },
+        {
+            "name": "plin-code/laravel-sql-dialect",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plin-code/laravel-sql-dialect.git",
+                "reference": "b060945220d27eda2ef5a6a5eb89624be66afbee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plin-code/laravel-sql-dialect/zipball/b060945220d27eda2ef5a6a5eb89624be66afbee",
+                "reference": "b060945220d27eda2ef5a6a5eb89624be66afbee",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "php": "^8.4"
+            },
+            "require-dev": {
+                "driftingly/rector-laravel": "^2.0",
+                "larastan/larastan": "^3.9",
+                "laravel/pint": "^1.29",
+                "nunomaduro/collision": "^8.1",
+                "orchestra/testbench": "^10.0 || ^11.0",
+                "pestphp/pest": "^4.6",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.1",
+                "pestphp/pest-plugin-type-coverage": "^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "rector/rector": "^2.0"
+            },
+            "suggest": {
+                "laravel/boost": "2.5 or higher reads the AI guidelines shipped in resources/boost"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PlinCode\\SqlDialect\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Barbaro",
+                    "email": "barbaro.daniele@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Cross driver SQL helpers for Laravel: wildcard safe LIKE and ILIKE, year extraction from date columns, and filter value normalisation. No service provider, no config.",
+            "homepage": "https://github.com/plin-code/laravel-sql-dialect",
+            "keywords": [
+                "cross-database",
+                "eloquent",
+                "ilike",
+                "laravel",
+                "mysql",
+                "postgresql",
+                "query-builder",
+                "sql",
+                "sqlite"
+            ],
+            "support": {
+                "issues": "https://github.com/plin-code/laravel-sql-dialect/issues",
+                "source": "https://github.com/plin-code/laravel-sql-dialect/tree/v1.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/PlinCode",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-10-02T07:26:38+00:00"
         },
         {
             "name": "pragmarx/google2fa",
