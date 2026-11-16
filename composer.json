@@ -21,6 +21,7 @@
         "plin-code/laravel-sql-dialect": "^1.2",
         "spatie/laravel-activitylog": "^5.1",
         "spatie/laravel-backup": "^10.4",
+        "spatie/laravel-medialibrary": "^11.23",
         "spatie/laravel-query-builder": "^7.3"
     },
     "require-dev": {
