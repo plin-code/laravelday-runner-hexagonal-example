@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f27251fe4f8ac0e97c6cc00e48a5796b",
+    "content-hash": "65dd8b58843abc950e8512da9a564508",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -5003,6 +5003,93 @@
                 "source": "https://github.com/phpstan/phpdoc-parser/tree/2.4.1"
             },
             "time": "2026-10-30T19:36:28+00:00"
+        },
+        {
+            "name": "plin-code/laravel-custom-fields",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/plin-code/laravel-custom-fields.git",
+                "reference": "463685e4e7e8e155f33210095f0caba64d2e271c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/plin-code/laravel-custom-fields/zipball/463685e4e7e8e155f33210095f0caba64d2e271c",
+                "reference": "463685e4e7e8e155f33210095f0caba64d2e271c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": "^12.0 || ^13.0",
+                "illuminate/support": "^12.0 || ^13.0",
+                "illuminate/validation": "^12.0 || ^13.0",
+                "php": "^8.4",
+                "plin-code/laravel-eloquent-sorts": "^1.0",
+                "plin-code/laravel-sql-dialect": "^1.2",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-query-builder": "^7.3.1"
+            },
+            "require-dev": {
+                "driftingly/rector-laravel": "^2.6",
+                "larastan/larastan": "^3.9",
+                "laravel/pao": "^1.0",
+                "laravel/pint": "^1.29",
+                "nunomaduro/collision": "^8.1",
+                "orchestra/testbench": "^10.0||^11.0",
+                "pestphp/pest": "^4.6||^5.3",
+                "pestphp/pest-plugin-arch": "^4.0||^5.0",
+                "pestphp/pest-plugin-laravel": "^4.1||^5.0",
+                "pestphp/pest-plugin-type-coverage": "^4.0||^5.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "rector/rector": "^2.6"
+            },
+            "suggest": {
+                "laravel/boost": "2.5 or higher reads the AI guidelines and agent skill shipped in resources/boost"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "CustomFields": "PlinCode\\CustomFields\\Facades\\CustomFields"
+                    },
+                    "providers": [
+                        "PlinCode\\CustomFields\\CustomFieldsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PlinCode\\CustomFields\\": "src/",
+                    "PlinCode\\CustomFields\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Barbaro",
+                    "email": "barbaro.daniele@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Typed, extensible custom fields for Eloquent models with filtering and sorting.",
+            "homepage": "https://github.com/plin-code/laravel-custom-fields",
+            "keywords": [
+                "PlinCode",
+                "custom-fields",
+                "eloquent",
+                "filtering",
+                "laravel",
+                "sorting"
+            ],
+            "support": {
+                "issues": "https://github.com/plin-code/laravel-custom-fields/issues",
+                "source": "https://github.com/plin-code/laravel-custom-fields/tree/v1.0.1"
+            },
+            "time": "2026-10-19T20:47:29+00:00"
         },
         {
             "name": "plin-code/laravel-eloquent-sorts",

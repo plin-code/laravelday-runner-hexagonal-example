@@ -14,6 +14,7 @@
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.14",
+        "plin-code/laravel-custom-fields": "^1.0",
         "plin-code/laravel-eloquent-sorts": "^1.0",
         "plin-code/laravel-sql-dialect": "^1.2",
         "spatie/laravel-query-builder": "^7.3"
