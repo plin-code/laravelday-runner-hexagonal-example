@@ -1,0 +1,55 @@
+name: static analysis
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # No service containers in this job, so the artisan commands that boot the
+    # framework are pushed onto drivers that need nothing running. .env.example
+    # points at MySQL and a database cache, and real environment variables win
+    # over it.
+    env:
+      DB_CONNECTION: sqlite
+      DB_DATABASE: ':memory:'
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, intl, pdo_mysql, redis, gd, exif, bcmath
+          coverage: none
+      - uses: actions/cache@v6
+        with:
+          path: vendor
+          key: vendor-8.4-${{ hashFiles('composer.lock') }}
+          restore-keys: vendor-8.4-
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --no-scripts
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      - name: Composer post-install scripts
+        run: composer run-script post-autoload-dump
+      # Larastan boots the framework to resolve container bindings, so the app
+      # needs a usable .env and key even though nothing here touches a database.
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      # The github error format is PHPStan's own: every violation comes back as
+      # an inline annotation on the diff instead of a wall of text in the log.
+      - run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress --error-format=github
