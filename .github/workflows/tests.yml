@@ -1,38 +1,92 @@
 name: tests
 
+# Documentation changes cannot break a test, so they do not pay for a run.
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
   pull_request:
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
 
 permissions:
   contents: read
 
-jobs:
-  ci:
-    runs-on: ubuntu-latest
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
+  pest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # A failing test almost always fails on both versions, so the second job
+    # would spend its minutes reporting the same thing.
+    strategy:
+      fail-fast: true
+      matrix:
+        php: ['8.4', '8.5']
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: testing
+          MYSQL_ROOT_PASSWORD: password
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+      redis:
+        image: redis:8
+        ports: ['6379:6379']
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: password
+      REDIS_HOST: 127.0.0.1
+      # package:discover and key:generate boot the framework before any
+      # migration has run, and the boot path touches the cache. The database
+      # store would query a "cache" table that does not exist yet. phpunit.xml
+      # already pins the same value for the test run itself.
+      CACHE_STORE: array
     steps:
-      - name: Checkout code
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+      - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.5'
-          tools: composer:v2
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, intl, pdo_mysql, redis, gd, exif, bcmath
           coverage: none
-
-      - name: Setup Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: actions/setup-node@v7
         with:
-          node-version: '22'
-
-      - name: Setup Application
-        run: composer setup
-
-      - name: Run CI Checks
-        run: composer ci:check
+          node-version-file: .nvmrc
+          cache: npm
+      # Composer resolves platform requirements against the running PHP, so a
+      # vendor directory built for one version must never be reused for another.
+      - uses: actions/cache@v6
+        with:
+          path: vendor
+          key: vendor-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
+          restore-keys: vendor-${{ matrix.php }}-
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist --no-scripts
+        env:
+          COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+      - name: Composer post-install scripts
+        run: composer run-script post-autoload-dump
+      - run: npm ci
+      # Feature tests render the Inertia root view, whose @vite directive
+      # throws without a manifest.
+      - run: npm run build
+      - run: cp .env.example .env
+      - run: php artisan key:generate
+      - run: php artisan test --parallel --processes=4
