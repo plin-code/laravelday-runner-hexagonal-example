@@ -1,0 +1,96 @@
+# Clean Architecture - Documentation
+
+This documentation describes the Clean Architecture structure implemented in the project.
+
+## Folder structure
+
+```
+app/
+├── Application/
+│   ├── Actions/            # Application use cases
+│   ├── Services/           # Application services
+│   ├── Jobs/               # Asynchronous jobs
+│   └── Listeners/          # Event listeners
+├── Domain/                 # Business logic
+│   └── Shared/             # Shared classes between domains
+└── Infrastructure/         # Implementation details
+    ├── Http/
+    │   ├── Controllers/
+    │   │   ├── Api/        # API controllers
+    │   │   └── Web/        # Web controllers (generation.web_controller_path)
+    │   ├── Middleware/     # HTTP middleware
+    │   ├── Requests/       # Form requests
+    │   └── Resources/      # API resources
+    ├── Mail/               # Mail classes
+    ├── Notifications/      # Notifications
+    ├── Observers/          # Model observers
+    ├── Exports/            # Excel and CSV exports
+    ├── Validation/         # Custom validation rules
+    ├── Console/Commands/   # Console commands (input adapters)
+    └── Exceptions/         # Custom exceptions
+```
+
+## Principles
+
+### 1. Domain Layer
+
+- Contains business logic
+- Does not depend on the Application or Infrastructure layers
+- Depends on Eloquent: models generated here extend `App\Domain\Shared\BaseModel`, which extends `Illuminate\Database\Eloquent\Model`
+- Includes models, enums, domain events
+
+### 2. Application Layer
+
+- Use case orchestration
+- Depends only on Domain Layer
+- Includes actions and application services
+
+### 3. Infrastructure Layer
+
+- Implementation of technical details
+- Depends on Application and Domain Layers
+- Includes controllers, repositories, external services
+
+## Available commands
+
+- `php artisan clean-arch:make-domain {name}` - Create a new domain
+- `php artisan clean-arch:make-action {name} {domain}` - Create a new action
+- `php artisan clean-arch:make-service {name}` - Create a new service
+- `php artisan clean-arch:make-controller {name}` - Create a new controller
+- `php artisan clean-arch:make-observer {name} {domain}` - Create a new observer
+- `php artisan clean-arch:make-listener {name}` - Create a new listener
+- `php artisan clean-arch:make-job {name}` - Create a new job
+- `php artisan clean-arch:make-mail {name}` - Create a new mail
+- `php artisan clean-arch:make-notification {name}` - Create a new notification
+- `php artisan clean-arch:make-export {name}` - Create a new export
+- `php artisan clean-arch:make-arch-rules` writes `phparkitect.php`, then `vendor/bin/phparkitect check` validates the architecture
+
+## Best Practices
+
+1. **Separation of Concerns**: Each class has a single responsibility
+2. **Dependency Inversion**: Depend on abstractions, not concrete implementations
+3. **Domain Events**: Use events to communicate between domains
+4. **Validation**: Always validate input data
+5. **Testing**: Write tests for every layer
+
+## Examples
+
+### Creating a new domain
+
+```bash
+php artisan clean-arch:make-domain Product
+```
+
+### Using an action
+
+```php
+class ProductsController extends Controller
+{
+    public function store(CreateProductRequest $request): ProductResource
+    {
+        $product = $this->createProductAction->execute($request->validated());
+
+        return new ProductResource($product);
+    }
+}
+```

@@ -19,7 +19,8 @@
         "spatie/laravel-medialibrary",
         "filament/filament",
         "spatie/laravel-backup",
-        "spatie/laravel-query-builder"
+        "spatie/laravel-query-builder",
+        "plin-code/laravel-clean-architecture"
     ],
     "sail": true,
     "skills": [
@@ -32,6 +33,7 @@
         "inertia-react-development",
         "tailwindcss-development",
         "filament-development",
+        "clean-architecture-development",
         "custom-fields-development",
         "activitylog-development",
         "laravel-backup",

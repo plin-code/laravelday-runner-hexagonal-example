@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Application\Actions;
+
+use Illuminate\Support\Facades\Log;
+use Throwable;
+
+abstract class BaseAction
+{
+    /**
+     * Log action execution.
+     *
+     * @param  array<string, mixed>  $context
+     */
+    protected function log(string $message, array $context = []): void
+    {
+        Log::info($message, array_merge([
+            'action' => static::class,
+        ], $context));
+    }
+
+    /**
+     * Log error during action execution.
+     *
+     * @param  array<string, mixed>  $context
+     */
+    protected function logError(string $message, Throwable $exception, array $context = []): void
+    {
+        Log::error($message, array_merge([
+            'action' => static::class,
+            'exception' => $exception->getMessage(),
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+        ], $context));
+    }
+}
