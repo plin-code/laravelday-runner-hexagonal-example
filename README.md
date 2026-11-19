@@ -4,6 +4,8 @@ Applicazione di esempio per gestire le iscrizioni alle gare di un running club. 
 
 Il percorso file per file di ogni flusso e le decisioni prese sono in [docs/flow.md](docs/flow.md).
 
+Il progetto accompagna il talk "Un anno di architettura esagonale in Laravel" (LaravelDay 2026, Verona). Le slide sono in [docs/slides-laravelday2026.pdf](docs/slides-laravelday2026.pdf).
+
 ## Requisiti
 
 - Docker con Docker Compose (il progetto gira dentro Laravel Sail)
